@@ -74,7 +74,10 @@ def umsaetzeDict(inpath, year):
                     }
         return
     for g in umsaetzeGroups(inpath, year):
-        betrag = (-1. if g[0][-1][-1] == "-" else 1.) * float(g[0][-1][:-1].replace(".","").replace(",","."))
+        try:
+            betrag = (-1. if g[0][-1][-1] == "-" else 1.) * float(g[0][-1][:-1].replace(".","").replace(",","."))
+        except ValueError as e:
+            continue
         yield { "Datum": g[0][0][-6:] + year,
                 "Empfänger": "Kontoführung" if "Kontoführung" in g[0] else " ".join(g[1]),
                 "Beschreibung": " ".join(g[1]) if "Kontoführung" in g[0] else " ".join(g[0][1:-1]).replace("Wertstellung: ", ""),
